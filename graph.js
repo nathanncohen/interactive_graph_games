@@ -8,6 +8,7 @@ window.onload = function() {
             graph = jQuery.parseJSON(response);
 	    console.log(graph);
 	    build_drawing(graph);
+	    onclick(0);
         },
         error: function(error) {
             console.log(error);

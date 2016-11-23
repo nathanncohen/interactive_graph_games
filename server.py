@@ -6,24 +6,20 @@ from sage.all import *
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/")
-def hello():
-    return "Welcome to Python Flask!eee"
-
 g = graphs.RandomTree(50)
-oldv = 0
 copweight = {v:0 for v in g}
 robweight = {v:0 for v in g}
-robweight[0] = 1
-copweight[0] = 1
-copweight[10] = 1
+
+oldv = 0
+robweight[oldv] = 1 # initial robber position
+copweight[2] = 1    # initial cop position
 
 @app.route('/click_on_node', methods=['POST'])
 def click_on_node():
     r"""
 
-    This function receives the new node clicked, and returns the distribution of
-    cops, robbers, and focused vertices.
+    This function receives the new node clicked, and returns the (possibly
+    updated) distribution of cops, robbers, and focused vertices.
 
     """
     global g, oldv, copweight, robweight
@@ -34,13 +30,12 @@ def click_on_node():
         robweight[v] = 1
         oldv = v
 
-        for u,k in copweight.items():
+        for u,k in copweight.items(): # The cop greedily moves toward the robber
             if not k:
                 continue
-            copweight[u] = 0
-            copweight[g.shortest_path(u,v)[1]] = 1
-
-    print robweight
+            if u!=v:
+                copweight[u] = 0
+                copweight[g.shortest_path(u,v)[1]] = 1
 
     return json.dumps({
         "focused": {'v'+str(u): bool(g.distance(u,oldv)<=2) for u in g},
@@ -50,6 +45,9 @@ def click_on_node():
 
 @app.route('/get_graph', methods=['POST'])
 def get_graph():
+    r"""
+    This function returns the graph as a json object
+    """
     global g
     data = {"link_distance": 50, "link_strength": 2, "edge_thickness": 4, "loops": [], "edge_labels": False, "vertex_size": 7, "vertex_labels": True, "directed": False, "gravity": 0.0, "charge": 0, "pos":[], "gravity": 0.04, "charge": -120}
     data['nodes'] = [{"group": "0", "name": v} for v in g]
@@ -57,9 +55,7 @@ def get_graph():
     print data
     return json.dumps(data)
 
-# "pos": [[6.123233995736766e-17, -1.0], [-0.9510565162951535, -0.3090169943749475], [-0.5877852522924732, 0.8090169943749473], [0.5877852522924729, 0.8090169943749476], [0.9510565162951536, -0.3090169943749472], [1.5308084989341916e-16, -0.5], [-0.4755282581475767, -0.1545084971874739], [-0.29389262614623674, 0.4045084971874736], [0.2938926261462364, 0.40450849718747384], [0.4755282581475769, -0.15450849718747348]],
-
-
+# "pos": [[6.123233995736766e-17, -1.0], [-0.9510565162951535, -0.3090169943749475], ...],
 
 if __name__ == "__main__":
     app.run()

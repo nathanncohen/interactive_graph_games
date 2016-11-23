@@ -24,4 +24,8 @@ It provides:
   To start this second http server, one can type ``execfile("server.py")`` in
   Sage.
 
+Once both scripts are started, one can connect with a browser to
+http://127.0.0.1:5001/. The default strategy consists of one cop with speed 1
+following a robber with speed 2.
+
 Nathann
