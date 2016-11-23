@@ -14,6 +14,7 @@ oldv = 0
 robweight[oldv] = 1 # initial robber position
 copweight[2] = 1    # initial cop position
 
+
 @app.route('/click_on_node', methods=['POST'])
 def click_on_node():
     r"""

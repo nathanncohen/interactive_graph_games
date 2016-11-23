@@ -13,7 +13,7 @@ It provides:
   SimpleHTTPServer 5001`` in the main directory.
 
 - a ``server.py`` file that answers the interactive requests made by the
-  javascript code. Two important things are defined in the graph:
+  javascript code. Two important things are defined in this file:
 
   - The graph itself
 
