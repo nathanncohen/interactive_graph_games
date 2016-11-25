@@ -1,19 +1,17 @@
+# This file implements the Ajax server, and queries the functions of
+# ``strategy.py``
+
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 import json
-from sage.all import *
+import strategy
+
+strategy = reload(strategy)
 
 app = Flask(__name__)
 CORS(app)
 
-g = graphs.RandomTree(50)
-copweight = {v:0 for v in g}
-robweight = {v:0 for v in g}
-
-oldv = 0
-robweight[oldv] = 1 # initial robber position
-copweight[2] = 1    # initial cop position
-
+current_configuration = strategy.initial_configuration()
 
 @app.route('/click_on_node', methods=['POST'])
 def click_on_node():
@@ -23,33 +21,25 @@ def click_on_node():
     updated) distribution of cops, robbers, and focused vertices.
 
     """
-    global g, oldv, copweight, robweight
+    global current_configuration
+    import strategy
+    # strategy = reload(strategy)
     v = json.loads(request.form.keys()[0])['node_clicked'] # the node clicked
 
-    if g.distance(v,oldv) <= 2:
-        robweight[oldv] = 0
-        robweight[v] = 1
-        oldv = v
+    try:
+        current_configuration = strategy.click(v,**current_configuration)
+    except Exception as e:
+        print e
+        raise
 
-        for u,k in copweight.items(): # The cop greedily moves toward the robber
-            if not k:
-                continue
-            if u!=v:
-                copweight[u] = 0
-                copweight[g.shortest_path(u,v)[1]] = 1
-
-    return json.dumps({
-        "focused": {'v'+str(u): bool(g.distance(u,oldv)<=2) for u in g},
-        "robweight" : {'v'+str(v):val for v,val in robweight.items()},
-        "copweight" : {'v'+str(v):val for v,val in copweight.items()},
-    })
+    return json.dumps(current_configuration)
 
 @app.route('/get_graph', methods=['POST'])
 def get_graph():
     r"""
     This function returns the graph as a json object
     """
-    global g
+    g = strategy.graph()
     data = {"link_distance": 50, "link_strength": 2, "edge_thickness": 4, "loops": [], "edge_labels": False, "vertex_size": 7, "vertex_labels": True, "directed": False, "gravity": 0.0, "charge": 0, "pos":[], "gravity": 0.04, "charge": -120}
     data['nodes'] = [{"group": "0", "name": v} for v in g]
     data['links'] = [{"strength": 0, "target": u, "color": "#aaa", "curve": 0, "source": v, "name": ""} for u,v in g.edges(labels=False)]

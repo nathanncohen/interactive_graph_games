@@ -10,10 +10,10 @@ function update_node_colors(colors) {
 function update_weights(copweight,robweight) {
 
     $(".copcount,.coppic").each(function () {
-	$(this).attr("weight",copweight['v'+$(this).attr('vertex_id')]);
+	$(this).attr("weight",copweight[$(this).attr('vertex_id')]);
     });
     $(".robcount,.robpic").each(function () {
-	$(this).attr("weight",robweight['v'+$(this).attr('vertex_id')]);
+	$(this).attr("weight",robweight[$(this).attr('vertex_id')]);
     });
     $("text.copcount,text.robcount").each(function () {
 	$(this).text($(this).attr('weight'));

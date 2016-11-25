@@ -13,16 +13,13 @@ It provides:
   SimpleHTTPServer 5001`` in the main directory.
 
 - a ``server.py`` file that answers the interactive requests made by the
-  javascript code. Two important things are defined in this file:
-
-  - The graph itself
-
-  - A function that is triggered whenever the user clicks on a vertex: this
-    function returns the (possibly updated) positions of cops and robbers on the
-    graph.
+  javascript code. It calls the functions of ``strategy.py``
 
   To start this second http server, one can type ``execfile("server.py")`` in
   Sage.
+
+- a ``strategy.py`` file that defines the graph and the strategy (see its
+  documentation).
 
 Once both scripts are started, one can connect with a browser to
 http://127.0.0.1:5001/. The default strategy consists of one cop with speed 1

@@ -6,7 +6,7 @@ window.onload = function() {
 	success: function(response) {
 	    //console.log(response);
 	    graph = jQuery.parseJSON(response);
-	    console.log(graph);
+	    // console.log(graph);
 	    build_drawing(graph);
 	    onclick(0);
 	},
@@ -88,7 +88,7 @@ function build_drawing (graph)
 	    .data(force.nodes())
 	    .enter().append("circle")
 	    .attr("class", "node")
-	    .attr("name", function(d) { return 'v'+d.name; })
+	    .attr("name", function(d) { return d.name; })
 	    .attr("r", graph.vertex_size)
 	    .style("fill", function(d) { return color(d.group); })
 	    .on('click', function(d) { onclick(d.name)})
@@ -224,7 +224,7 @@ function build_drawing (graph)
 	    v_labels
 	    //.attr("x",function(d) { return d.x; })
 	    //.attr("y",function(d) { console.log(d.y); return d.y+30; })
-		.attr("transform",function(d) { console.log("translate("+(d.x)+","+d.y+")"); return "translate("+(d.x)+","+d.y+")"; })
+		.attr("transform",function(d) { return "translate("+(d.x)+","+d.y+")"; })
 	}
 	// Position of the edge labels
 	if(graph.edge_labels){
