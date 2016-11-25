@@ -21,7 +21,7 @@ It provides:
 - a ``strategy.py`` file that defines the graph and the strategy (see its
   documentation).
 
-Once both scripts are started, one can connect with a browser to
+Once both servers run, one can connect with a browser to
 http://127.0.0.1:5001/. The default strategy consists of one cop with speed 1
 following a robber with speed 2 (played by the user).
 
