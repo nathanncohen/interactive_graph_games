@@ -1,7 +1,7 @@
 # This file implements the Ajax server, and queries the functions of
 # ``strategy.py``
 
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from flask_cors import CORS, cross_origin
 import json
 import strategy
@@ -45,6 +45,11 @@ def get_graph():
     data['links'] = [{"strength": 0, "target": u, "color": "#aaa", "curve": 0, "source": v, "name": ""} for u,v in g.edges(labels=False)]
     print data
     return json.dumps(data)
+
+@app.route('/', defaults={'path': 'index.html'}) # All other URLS are static files
+@app.route('/<path:path>')
+def catch_all(path):
+    return send_from_directory('.', path)
 
 # "pos": [[6.123233995736766e-17, -1.0], [-0.9510565162951535, -0.3090169943749475], ...],
 

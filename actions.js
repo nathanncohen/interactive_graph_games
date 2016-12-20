@@ -32,7 +32,7 @@ function update_weights(copweight,robweight) {
 function onclick (d) {
 
     $.ajax({
-        url: 'http://127.0.0.1:5000/click_on_node',
+        url: '/click_on_node',
         data: JSON.stringify({'node_clicked':d}),
         type: 'POST',
         success: function(response) {

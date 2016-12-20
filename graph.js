@@ -1,6 +1,6 @@
 window.onload = function() {
     $.ajax({
-	url: 'http://127.0.0.1:5000/get_graph',
+	url: '/get_graph',
 	data: JSON.stringify({}),
 	type: 'POST',
 	success: function(response) {
